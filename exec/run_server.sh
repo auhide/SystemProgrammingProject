@@ -1,5 +1,7 @@
+cd /home/auhide/Desktop/SPrProject/
+
 echo "Compiling..."
-gcc  ../server.c -o ../bin/server -w -lpthread
+gcc  server.c -o ./bin/server -w -lpthread
 
 echo "Running the script"
-../bin/server
+./bin/server
