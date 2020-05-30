@@ -113,5 +113,4 @@ int username_is_valid(char *username)
         return 0;
     }
 
-    // return user_added_successfully;
 }
