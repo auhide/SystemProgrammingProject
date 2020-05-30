@@ -1,8 +1,3 @@
-/*
- * client.c
- * Version 20161003
- * Written by Harry Wong (RedAndBlueEraser)
- */
 
 #include <netdb.h>
 #include <stdio.h>

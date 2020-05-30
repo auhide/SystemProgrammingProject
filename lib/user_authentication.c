@@ -64,7 +64,6 @@ int validate_user(int file_desc, char *username)
 int add_user(int file_desc, char *username)
 {
     int is_registered = validate_user(file_desc, username);
-    printf("UNAMEEEE::: %s", username);
 
     if (!is_registered && 
         strlen(username) >= 4 && 
@@ -88,7 +87,7 @@ int add_user(int file_desc, char *username)
 
 void send_msg(int sockfd, char *buff)
 {
-    int n = 0;
+    // int n = 0;
 
     bzero(buff, sizeof(buff));
     scanf("%s", buff);
@@ -96,11 +95,15 @@ void send_msg(int sockfd, char *buff)
     write(sockfd, buff, sizeof(buff));
 }
 
+void send_cust_msg(int sockfd, char *string)
+{
+    write(sockfd, string, sizeof(string));
+}
+
 void recv_msg(int sockfd, char *buff)
 {
-
+    // printf("RECV BEFORE CLEANING: %s\n", buff);
     bzero(buff, sizeof(buff));
     read(sockfd, buff, sizeof(buff));
-
-    printf("%s\n", buff);
+    // printf("READ MESSAGE: %s\n", buff);
 }

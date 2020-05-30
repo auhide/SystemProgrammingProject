@@ -15,18 +15,16 @@ void registration_form(int sockfd, char *buff);
 
 void communicate(int sockfd) 
 { 
-    char buff[MAX];
+    char buff[MAX] = {0};
 
     printf("Welcome to Trippy\n");
     
     display_init_options();
 
-    // TODO: FIX VISUALIZATION MESSAGE HERE
     init_input_validation(sockfd, buff);
-    recv_msg(sockfd, buff);
     printf("CLIENT BUFFER: %s\n", buff);
 
-    if (substring_in_string(REGISTRATION, buff))
+    if (strcmp(REGISTRATION, buff) == 0)
     {
         registration_form(sockfd, buff);
     }
@@ -59,6 +57,7 @@ void display_init_options()
 
 void init_input_validation(int sockfd, char *buff)
 {
+    printf("SOCKET: %d", sockfd);
 
     do
     {
@@ -78,37 +77,36 @@ void init_input_validation(int sockfd, char *buff)
     } while (substring_in_string("0", buff));
 }
 
-
 void registration_form(int sockfd, char *buff)
 {
-    int success = 0;
-
-    printf("Registration Form\n");
-    printf("Your username has to be greater than 3 and less than 8 symbols\n\n");
+    printf("SOCKET: %d", sockfd);
+    // bzero(buff, MAX);
+    // strcpy(buff, "0");
 
     do
     {
-        printf("Enter username: ");
+        // Sending the initial choice to the Server
+        printf("Enter username: "); 
         send_msg(sockfd, buff);
-        // bzero(buff, sizeof(buff));
-        // scanf("%s", buff);
-        // if (strlen(buff) )
 
+        // Receiving the response from the Server
         recv_msg(sockfd, buff);
-        printf("CLIENT STATUS: %s", buff);
-        if (substring_in_string("0", buff) == "0")
+        printf("SERVER RESPONSE: |%s|\n", buff);
+
+        if (substring_in_string("0", buff))
         {
-            printf("Either your username is too short/long or it has already been registered!\n");
-            success = 1;
+            printf("Wrong input, try again!\n");
         }
 
-    } while (substring_in_string("0", buff) == "0");
+    } while (substring_in_string("0", buff));
 
-    printf("Registration successful, you can Login now!\n");
-}
-
-
-void login(int sockfd, char *buff)
-{
+    bzero(buff, MAX);
+    strcpy(buff, "1");
 
 }
+
+
+// void login(int sockfd, char *buff)
+// {
+
+// }

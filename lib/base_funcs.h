@@ -1,5 +1,6 @@
 #include <stdio.h> 
 #include <fcntl.h> 
+#include <time.h>
 
 
 int substring_in_string(char *substr, char *str);
@@ -11,6 +12,8 @@ int get_read_fd(char *filename);
 int get_append_fd(char *filename);
 
 void strtolower(char *str);
+
+void log_print(char *mode, char *string);
 
 
 void strtolower(char *str)
