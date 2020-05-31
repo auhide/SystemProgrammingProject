@@ -3,11 +3,11 @@
 #include <time.h>
 #include <ctype.h>
 #include <regex.h>
-
+#include "constants.h"
 
 int substring_in_string(char *substr, char *str);
 
-void split_string_to_array(char *string, char *delimiter, char **array);
+void split_string_to_array(char *string, char *delimiter, char array[TRIPS_ROWS][TRIPS_COLS]);
 
 int get_read_fd(char *filename);
 
@@ -60,7 +60,7 @@ int get_read_fd(char *filename)
     return fd;
 }
 
-void split_string_to_array(char *string, char *delimiter, char **array)
+void split_string_to_array(char *string, char *delimiter, char array[TRIPS_ROWS][TRIPS_COLS])
 {
 
     char *string_split = {0};
@@ -69,7 +69,7 @@ void split_string_to_array(char *string, char *delimiter, char **array)
     string_split = strtok(string, delimiter);
     while(string_split != NULL)
     {   
-        array[i++] = string_split;
+        strcpy(array[i++], string_split);
         string_split = strtok(NULL, delimiter);
     }
 }

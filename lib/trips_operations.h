@@ -5,11 +5,10 @@
 #include <limits.h>
 #include <ctype.h>
 
-#include "base_funcs.h"
 #include "constants.h"
 
 
-void add_trip(int file_desc, char trips_arr[TRIPS_ROWS][TRIPS_COLS]);
+int add_trip(int file_desc, char trips_arr[TRIPS_ROWS][TRIPS_COLS]);
 
 void print_line_arr(char line[TRIPS_ROWS][TRIPS_COLS]);
 
@@ -17,13 +16,17 @@ void get_full_storage(char *data);
 
 int get_lines_number(char *data, int data_size);
 
-void search_user_trips(char **entries, int entries_len, char *first_dest, char *second_dest);
+void search_user_trips(char entries[TRIPS_ROWS][TRIPS_COLS],
+                       int entries_len,
+                       char *username,
+                       char *first_dest, 
+                       char *second_dest);
 
-void display_trips(char **data, int data_size);
+void display_trips(char data[TRIPS_ROWS][TRIPS_COLS], int data_size);
 
 void add_chunks_to(char **array, int chunks_to_add);
 
-void get_user_trips(char **data, int data_size, char *username, char **user_data);
+void get_user_trips(char data[TRIPS_ROWS][TRIPS_COLS], int data_size, char *username, char user_data[TRIPS_ROWS][TRIPS_COLS]);
 
 
 // int main()
@@ -97,10 +100,10 @@ void get_full_storage(char *data)
 }
 
 
-void display_trips(char **data, int data_size)
+void display_trips(char data[TRIPS_ROWS][TRIPS_COLS], int data_size)
 {
     int found = 0;
-    char *curr_line_arr[TRIPS_ROWS];
+    char curr_line_arr[TRIPS_ROWS][TRIPS_COLS];
     printf("YOUR TRIPS:\n");
 
     for (int i = 0; i < data_size; i++)
@@ -121,7 +124,7 @@ void display_trips(char **data, int data_size)
 }
 
 
-void get_user_trips(char **data, int data_size, char *username, char **user_data)
+void get_user_trips(char data[TRIPS_ROWS][TRIPS_COLS], int data_size, char *username, char user_data[TRIPS_ROWS][TRIPS_COLS])
 {
     int found = 0;
     int user_data_index = 0;
@@ -153,14 +156,15 @@ int get_lines_number(char *data, int data_size)
 }
 
 
-void search_user_trips(char **entries,
+void search_user_trips(char entries[TRIPS_ROWS][TRIPS_COLS],
                        int entries_len,
+                       char *username,
                        char *first_dest, 
                        char *second_dest)
 {
     int found = 0;
-    char *curr_line_arr[TRIPS_ROWS];
-    printf("Found Trips:\n");
+    char curr_line_arr[TRIPS_ROWS][TRIPS_COLS];
+
 
     for (int i = 0; i < entries_len; i++)
     {
@@ -168,8 +172,9 @@ void search_user_trips(char **entries,
         {
             split_string_to_array(entries[i], LINE_DELIMITER, curr_line_arr);
 
-            if (substring_in_string(first_dest, curr_line_arr[1]) &&
-                substring_in_string(second_dest, curr_line_arr[1]))
+            if (substring_in_string(username, curr_line_arr[USER]) &&
+                substring_in_string(first_dest, curr_line_arr[DESTINATIONS]) &&
+                substring_in_string(second_dest, curr_line_arr[DESTINATIONS]))
             {
                 print_line_arr(curr_line_arr);
                 found = 1;
@@ -184,7 +189,7 @@ void search_user_trips(char **entries,
 }
 
 
-void add_trip(int file_desc, char trips_arr[TRIPS_ROWS][TRIPS_COLS])
+int add_trip(int file_desc, char trips_arr[TRIPS_ROWS][TRIPS_COLS])
 {
     char current_snippet[TRIPS_COLS] = {0};
     print_line_arr(trips_arr);
@@ -209,6 +214,7 @@ void add_trip(int file_desc, char trips_arr[TRIPS_ROWS][TRIPS_COLS])
 
     write(file_desc, "\n", 1);
     printf("Trip added successfully!\n");
+    return 1;
 }
 
 

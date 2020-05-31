@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
 
-// #include "sv_file_comm.c"
-// #include "base_funcs.h"
 #include "constants.h"
 
 void send_msg(int sockfd, char *buff);
@@ -15,14 +13,6 @@ int add_user(int file_desc, char *username);
 
 int validate_user(int file_desc, char *username);
 
-
-// int main()
-// {
-//     int fd = get_append_fd(USERS_FILE);
-//     add_user(fd, "user1");
-
-//     return 0;
-// }
 
 char *get_users_storage()
 {

@@ -9,7 +9,7 @@
 // Trips constants
 #define TRIPS_ROWS 8
 #define TRIPS_COLS 1024
-#define STORAGE "data/storage.txt"
+#define STORAGE "/home/auhide/Desktop/SPrProject/data/storage.txt"
 #define USER 0
 #define DESTINATIONS 1
 #define LATITUDE1 2
@@ -18,7 +18,7 @@
 #define LONGITUDE2 5
 #define AVG_SPEED 6
 #define DISTANCE 7
-#define TRIPS_MENU_CHOICES "1~2~3~4"
+#define TRIPS_MENU_CHOICES "1~2~3~4~exit"
 
 // Regexes
 #define COORD_REGEX "^([0-9]+\\.[0-9]{3})$"
