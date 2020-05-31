@@ -21,3 +21,4 @@
 #define USERS_FILE "/home/auhide/Desktop/SPrProject/data/users.txt"
 #define INIT_VALID_INPUTS "1~2\n"
 #define REGISTRATION "1"
+#define EXIT "exit"

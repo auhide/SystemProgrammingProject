@@ -11,6 +11,8 @@ void validate_registration(int sockfd, char *buff);
 
 int username_is_valid(char *username);
 
+int login_is_valid(char *username);
+
 
 void communicate(int sockfd) 
 { 
@@ -26,30 +28,9 @@ void communicate(int sockfd)
     }
     else
     {
-        printf("LOGIN\n");
+        input_validation(sockfd, buff, login_is_valid);
     }
-    // printf("OUTTTT");
-
-    // for (;;) { 
-    //     bzero(buff, MAX); 
-
-    //     read(sockfd, buff, sizeof(buff));
-    //     // print buffer which contains the client contents 
-    //     printf("From client: %s\t To client : ", buff); 
-    //     bzero(buff, MAX);
-    //     n = 0;
-    //     // copy server message in the buffer
-    //     while ((buff[n++] = getchar()) != '\n');
-  
-    //     // and send that buffer to client 
-    //     write(sockfd, buff, sizeof(buff)); 
-  
-    //     // if msg contains "Exit" then server exit and chat ended. 
-    //     if (strncmp("exit", buff, 4) == 0) { 
-    //         printf("Server Exit...\n"); 
-    //         break; 
-    //     } 
-    // } 
+    
 } 
 
 void input_validation(int sockfd, char *buff, int (*validation_func)(char *))
@@ -57,7 +38,6 @@ void input_validation(int sockfd, char *buff, int (*validation_func)(char *))
     int valid = 0;
     bzero(buff, MAX);
 
-    printf("CLIENT: SOCKET: %d", sockfd);
     do
     {
         recv_msg(sockfd, buff);
@@ -66,8 +46,6 @@ void input_validation(int sockfd, char *buff, int (*validation_func)(char *))
         {
             printf("Server: Response 1\n");
             write(sockfd, "1", sizeof(buff));
-            bzero(buff, MAX);
-            strcpy(buff, "1");
             valid = 1;
         } 
         else
@@ -75,7 +53,7 @@ void input_validation(int sockfd, char *buff, int (*validation_func)(char *))
             printf("Server: Response 0\n");
             write(sockfd, "0", sizeof(buff));
             bzero(buff, MAX);
-            strcpy(buff, "1");
+            strcpy(buff, "0");
         }
 
     } while (!valid);
@@ -83,7 +61,6 @@ void input_validation(int sockfd, char *buff, int (*validation_func)(char *))
 
 int init_input_is_valid(char *input)
 {
-    printf("INIT INPUT::: %s\n", input);
 
     if (!substring_in_string("~", input) && strncmp("\n", input, 1) != 0)
     {
@@ -113,4 +90,19 @@ int username_is_valid(char *username)
         return 0;
     }
 
+}
+
+int login_is_valid(char *username)
+{
+    int fd = get_read_fd(USERS_FILE);
+    int user_is_registered = validate_user(fd, username);
+
+    if (user_is_registered)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }

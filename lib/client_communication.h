@@ -12,6 +12,10 @@ void init_input_validation(int sockfd, char *buff);
 
 void registration_form(int sockfd, char *buff);
 
+void login_form(int sockfd, char *buff);
+
+void options_template(char *string);
+
 
 void communicate(int sockfd) 
 { 
@@ -30,7 +34,7 @@ void communicate(int sockfd)
     }
     else
     {
-        printf("LOGIN");
+        login_form(sockfd, buff);
     }
     // for (;;)
 	// {
@@ -54,10 +58,17 @@ void display_init_options()
     printf("2. Login\n");
 }
 
+void options_template(char *string)
+{
+    printf("\n\n");
+    printf("-----------------\n");
+    printf("%s\n", string);
+    printf("-----------------\n");
+}
 
 void init_input_validation(int sockfd, char *buff)
 {
-    printf("SOCKET: %d", sockfd);
+    char resp_buff[MAX];
 
     do
     {
@@ -66,22 +77,20 @@ void init_input_validation(int sockfd, char *buff)
         send_msg(sockfd, buff);
 
         // Receiving the response from the Server
-        recv_msg(sockfd, buff);
-        printf("SERVER RESPONSE: %s\n", buff);
+        recv_msg(sockfd, resp_buff);
+        printf("SERVER RESPONSE: %s\n", resp_buff);
 
-        if (substring_in_string("0", buff))
+        if (substring_in_string("0", resp_buff))
         {
             printf("Wrong input, try again!\n");
         }
 
-    } while (substring_in_string("0", buff));
+    } while (substring_in_string("0", resp_buff));
 }
 
 void registration_form(int sockfd, char *buff)
-{
-    printf("SOCKET: %d", sockfd);
-    // bzero(buff, MAX);
-    // strcpy(buff, "0");
+{   
+    options_template("Registration");
 
     do
     {
@@ -105,8 +114,28 @@ void registration_form(int sockfd, char *buff)
 
 }
 
+void login_form(int sockfd, char *buff)
+{
+    options_template("Login");
+    
+    do
+    {
+        // Sending the initial choice to the Server
+        printf("Enter username: "); 
+        send_msg(sockfd, buff);
 
-// void login(int sockfd, char *buff)
-// {
+        // Receiving the response from the Server
+        recv_msg(sockfd, buff);
+        printf("SERVER RESPONSE: |%s|\n", buff);
 
-// }
+        if (substring_in_string("0", buff))
+        {
+            printf("Wrong input, try again!\n");
+        }
+
+    } while (substring_in_string("0", buff));
+
+    bzero(buff, MAX);
+    strcpy(buff, "1");
+
+}
