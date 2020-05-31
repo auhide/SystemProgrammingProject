@@ -1,5 +1,4 @@
-user1#Hawaii-Bulgaria#12.423#43.222#60#200
-user2#Belgium-Netherlands#44.621#125.222#79#88
-User3#belgium-netherlands#44.621#125.222#79#48
-User3#belgium-netherlands#44.621#125.222#79#10
-User3#england-bulgaria#44.621#125.222#79#44
+user2#england-bulgaria#44.621#125.222#55.621#126.621#79#44
+user2#england-bulgaria#44.621#125.222#55.621#126.621#79#44
+user2#england-bulgaria#44.621#125.222#55.621#125.222#79#44
+user2#england-bulgaria#44.621#125.222#55.621#125.222#79#44

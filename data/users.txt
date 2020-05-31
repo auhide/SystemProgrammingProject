@@ -1,4 +1,2 @@
 user1
 user2
-konkon
-around

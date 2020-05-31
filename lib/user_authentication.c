@@ -2,7 +2,7 @@
 #include <unistd.h>
 
 // #include "sv_file_comm.c"
-#include "base_funcs.h"
+// #include "base_funcs.h"
 #include "constants.h"
 
 void send_msg(int sockfd, char *buff);

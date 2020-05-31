@@ -9,9 +9,9 @@
 #include "constants.h"
 
 
-void add_trip(int file_desc, char **trips_arr);
+void add_trip(int file_desc, char trips_arr[TRIPS_ROWS][TRIPS_COLS]);
 
-void print_line_arr(char **line);
+void print_line_arr(char line[TRIPS_ROWS][TRIPS_COLS]);
 
 void get_full_storage(char *data);
 
@@ -64,6 +64,7 @@ void add_chunks_to(char **array, int chunks_to_add)
     }
 }
 
+
 void free_2d_array(char **array, int array_len)
 {
     for (int i = 0; i < array_len; i++)
@@ -73,6 +74,7 @@ void free_2d_array(char **array, int array_len)
 
     free(array);
 }
+
 
 void get_full_storage(char *data)
 {
@@ -93,6 +95,7 @@ void get_full_storage(char *data)
     close(fd);
 
 }
+
 
 void display_trips(char **data, int data_size)
 {
@@ -117,11 +120,11 @@ void display_trips(char **data, int data_size)
     }
 }
 
+
 void get_user_trips(char **data, int data_size, char *username, char **user_data)
 {
     int found = 0;
     int user_data_index = 0;
-    
 
     for (int i = 0; i < data_size; i++)
     {
@@ -132,6 +135,7 @@ void get_user_trips(char **data, int data_size, char *username, char **user_data
         
     }
 }
+
 
 int get_lines_number(char *data, int data_size)
 {
@@ -179,7 +183,8 @@ void search_user_trips(char **entries,
     }
 }
 
-void add_trip(int file_desc, char **trips_arr)
+
+void add_trip(int file_desc, char trips_arr[TRIPS_ROWS][TRIPS_COLS])
 {
     char current_snippet[TRIPS_COLS] = {0};
     print_line_arr(trips_arr);
@@ -207,9 +212,10 @@ void add_trip(int file_desc, char **trips_arr)
 }
 
 
-void print_line_arr(char **line)
+void print_line_arr(char line[TRIPS_ROWS][TRIPS_COLS])
 {
     printf("-----------------------------\n");
+
     for (int curr_trip_stats = 0; curr_trip_stats < TRIPS_ROWS; curr_trip_stats++)
     {
         switch(curr_trip_stats)
@@ -220,17 +226,23 @@ void print_line_arr(char **line)
             case DESTINATIONS:
                 printf("Trip: %s\n", line[curr_trip_stats]);
                 break;
-            case LATITUDE:
-                printf("Latitude: %s\n", line[curr_trip_stats]);
+            case LATITUDE1:
+                printf("First Latitude: %s\n", line[curr_trip_stats]);
                 break;
-            case LONGITUDE:
-                printf("User: %s\n", line[curr_trip_stats]);
+            case LONGITUDE1:
+                printf("First Longitude: %s\n", line[curr_trip_stats]);
+                break;
+            case LATITUDE2:
+                printf("Second Latitude: %s\n", line[curr_trip_stats]);
+                break;
+            case LONGITUDE2:
+                printf("Second Longitude: %s\n", line[curr_trip_stats]);
                 break;
             case AVG_SPEED:
-                printf("Average Speed: %s\n", line[curr_trip_stats]);
+                printf("Average Speed: %skm/h\n", line[curr_trip_stats]);
                 break;
             case DISTANCE:
-                printf("Distance: %s\n", line[curr_trip_stats]);
+                printf("Distance: %skm\n", line[curr_trip_stats]);
                 break;
         }
     }

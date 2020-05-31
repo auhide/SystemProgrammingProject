@@ -1,6 +1,8 @@
 #include <stdio.h> 
 #include <fcntl.h> 
 #include <time.h>
+#include <ctype.h>
+#include <regex.h>
 
 
 int substring_in_string(char *substr, char *str);
@@ -14,6 +16,8 @@ int get_append_fd(char *filename);
 void strtolower(char *str);
 
 void log_print(char *mode, char *string);
+
+int regex_match(char *string, char *regex);
 
 
 void strtolower(char *str)
@@ -73,6 +77,36 @@ void split_string_to_array(char *string, char *delimiter, char **array)
 int substring_in_string(char *substr, char *str)
 {
     if (strstr(str, substr) != NULL)
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+int string_is_alphabetic(char *str)
+{
+    for (int i = 0; i < strlen(str); i++)
+    {
+        if (!isalpha(str[i]))
+        {
+            return 0;
+        }
+    }
+    
+    return 1;
+}
+
+
+int regex_match(char *string, char *regex_string)
+{
+    regex_t regex;
+    int reti;
+
+    reti = regcomp(&regex, regex_string, REG_EXTENDED);
+    reti = regexec(&regex, string, 0, NULL, 0);
+
+    if (!reti)
     {
         return 1;
     }
