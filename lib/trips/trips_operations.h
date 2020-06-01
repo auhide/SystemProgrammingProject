@@ -5,7 +5,7 @@
 #include <limits.h>
 #include <ctype.h>
 
-#include "constants.h"
+#include "../base/constants.h"
 
 
 int add_trip(int file_desc, char trips_arr[TRIPS_ROWS][TRIPS_COLS]);
@@ -29,35 +29,6 @@ void add_chunks_to(char **array, int chunks_to_add);
 void get_user_trips(char data[TRIPS_ROWS][TRIPS_COLS], int data_size, char *username, char user_data[TRIPS_ROWS][TRIPS_COLS]);
 
 
-// int main()
-// {
-//     char *trips[TRIPS_ROWS] = {"User3", "England-Bulgaria", "44.621", "125.222", "79", "44"};
-//     add_trip(get_append_fd(STORAGE), trips);
-
-//     char *data = malloc(sizeof(char) * START_SIZE);
-//     int data_size;
-
-//     get_full_storage(data);
-//     // printf("%s", data);
-//     data_size = strlen(data);
-    
-//     int lines_count = get_lines_number(data, data_size);
-//     printf("Lines: %d\n", lines_count);
-
-//     char *lines_arr[TRIPS_COLS] = {0};
-//     split_string_to_array(data, STORAGE_DELIMITER, lines_arr);
-
-//     // Dinamically allocate the 2d Array for the users' information
-//     char **user_data = (char **)calloc(data_size, sizeof (char *));
-//     add_chunks_to(lines_count, user_data);
-
-//     get_user_trips(lines_arr, lines_count, "user2", user_data);
-//     // display_trips(user_data, lines_count);
-//     search_user_trips(user_data, lines_count, "belgium", "netherlands");
-
-    // free(data);
-//     return 0;
-// }
 
 void add_chunks_to(char **array, int chunks_to_add)
 {

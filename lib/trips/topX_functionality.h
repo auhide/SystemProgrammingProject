@@ -1,8 +1,16 @@
 #include <stdio.h>
-#include "file_interaction.c"
 
 
 int cmp_distances(char *f_entry, char *s_entry);
+
+int display_top(char *type, int x, char user_data[TRIPS_ROWS][TRIPS_COLS], int len);
+
+int count_user_trips(char user_data[TRIPS_ROWS][TRIPS_COLS], int general_len);
+
+void sort_by_distances(char user_data[TRIPS_ROWS][TRIPS_COLS], int len);
+
+void swap(char *line1, char *line2);
+
 
 // int main()
 // {
@@ -26,7 +34,7 @@ int cmp_distances(char *f_entry, char *s_entry);
 //     int user_trips_count = count_user_trips(user_data, lines_count);
 
 //     sort_by_distances(user_data, lines_count);
-//     display_top_longest("shortest", 3, user_data, user_trips_count);
+//     display_top("shortest", 3, user_data, user_trips_count);
     
 //     free_2d_array(user_data, lines_count);
 //     free(data);
@@ -41,10 +49,10 @@ int cmp_distances(char *f_entry, char *s_entry)
     strcpy(f_entry_temp, f_entry);
     strcpy(s_entry_temp, s_entry); 
 
-    char *f_entry_arr[TRIPS_ROWS];
+    char f_entry_arr[TRIPS_ROWS][TRIPS_COLS];
     split_string_to_array(f_entry_temp, LINE_DELIMITER, f_entry_arr);
 
-    char *s_entry_arr[TRIPS_ROWS];
+    char s_entry_arr[TRIPS_ROWS][TRIPS_COLS];
     split_string_to_array(s_entry_temp, LINE_DELIMITER, s_entry_arr);
 
     int num1 = atoi(f_entry_arr[DISTANCE]);
@@ -53,7 +61,7 @@ int cmp_distances(char *f_entry, char *s_entry)
     return num1 - num2;
 }
 
-int count_user_trips(char **user_data, int general_len)
+int count_user_trips(char user_data[TRIPS_ROWS][TRIPS_COLS], int general_len)
 {
     int trips_count = 0;
 
@@ -65,7 +73,7 @@ int count_user_trips(char **user_data, int general_len)
     return trips_count;
 }
 
-void sort_by_distances(char **user_data, int len)
+void sort_by_distances(char user_data[TRIPS_ROWS][TRIPS_COLS], int len)
 {
     for (int i = 0; i < len - 1; i++)
     {
@@ -89,7 +97,7 @@ void swap(char *line1, char *line2)
 }
 
 
-int display_top_longest(char *type, int x, char **user_data, int len)
+int display_top(char *type, int x, char user_data[TRIPS_ROWS][TRIPS_COLS], int len)
 {
     char *curr_line[TRIPS_COLS];
 
@@ -123,7 +131,7 @@ int display_top_longest(char *type, int x, char **user_data, int len)
     }
     else
     {
-        printf("Your trips are less than %d", x);
+        printf("Your trips are less than %d, they are %d", x, len);
         return 0;
     }
 }

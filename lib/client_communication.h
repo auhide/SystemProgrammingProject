@@ -1,7 +1,8 @@
 
 #include "user_authentication.h"
-#include "base_funcs.h"
-#include "trips_operations.h"
+#include "base/base_funcs.h"
+#include "trips/trips_operations.h"
+#include "trips/topX_functionality.h"
 
 
 void communicate(int sockfd);
@@ -28,6 +29,7 @@ void display_user_trips(char *username);
 
 void find_trip(char *username);
 
+void get_topx(char *username);
 
 
 
@@ -52,19 +54,6 @@ void communicate(int sockfd)
         login_form(sockfd, buff);
         trips_interaction(sockfd, buff);
     }
-    // for (;;)
-	// {
-    //     write(sockfd, buff, sizeof(buff));
-        
-    //     bzero(buff, sizeof(buff)); 
-    //     read(sockfd, buff, sizeof(buff)); 
-    //     printf("From Server : %s", buff); 
-        
-    //     if ((strncmp(buff, "exit", 4)) == 0) { 
-    //         printf("Client Exit...\n"); 
-    //         break; 
-    //     } 
-    // } 
 }
 
 
@@ -135,6 +124,8 @@ void trips_interaction(int sockfd, char *buff)
     {
         bzero(buff, MAX);
         printf("\n\n");
+        printf("Enter 'exit' if you want to close the program\n");
+
         printf("1. Add new trip\n");
         printf("2. Display all my trips\n");
         printf("3. Display a certain trip of mine\n");
@@ -159,7 +150,7 @@ void trips_interaction(int sockfd, char *buff)
         }
         else if (strcmp("4", buff) == 0)
         {
-            // TODO: Implement TopX here
+            get_topx(username);
         }
         else if (strcmp("exit", buff) == 0)
         {
@@ -168,6 +159,48 @@ void trips_interaction(int sockfd, char *buff)
     }
 }
 
+
+void get_topx(char *username)
+{
+    char *data = malloc(sizeof(char) * START_SIZE);
+    int data_size;
+
+    get_full_storage(data);
+    data_size = strlen(data);
+
+    int lines_count = get_lines_number(data, data_size);
+    
+    char lines_arr[TRIPS_ROWS][TRIPS_COLS] = {0};
+    split_string_to_array(data, STORAGE_DELIMITER, lines_arr);
+
+    char user_data[TRIPS_ROWS][TRIPS_COLS];
+
+    get_user_trips(lines_arr, lines_count, username, user_data);
+    
+    int user_trips_count = count_user_trips(user_data, lines_count);
+
+    sort_by_distances(user_data, user_trips_count);
+
+    char type[MAX];
+    int x;
+    if (user_trips_count)
+    {
+        do
+        {
+            printf("Enter TopX type [longest/shortest]: ");
+            scanf("%s", type);
+            printf("Enter X: ");
+            scanf("%d", &x);
+        } while (strcmp("shortest\n", type) == 0 || strcmp("longest\n", type) == 0);
+
+        display_top(type, x, user_data, user_trips_count);
+    }
+    else
+    {
+        printf("You have no saved trips!");
+    }
+
+}
 
 void find_trip(char *username)
 {
@@ -195,6 +228,8 @@ void find_trip(char *username)
     
     char lines_arr[TRIPS_ROWS][TRIPS_COLS] = {0};
     split_string_to_array(data, STORAGE_DELIMITER, lines_arr);
+
+    free(data);
     ////////////////////////////////////////////////////
 
     search_user_trips(lines_arr, lines_count, username, dest1, dest2);
@@ -215,11 +250,13 @@ void display_user_trips(char *username)
     char lines_arr[TRIPS_ROWS][TRIPS_COLS] = {0};
     split_string_to_array(data, STORAGE_DELIMITER, lines_arr);
 
-    // Dinamically allocate the 2d Array for the users' information
     char user_data[TRIPS_ROWS][TRIPS_COLS];
 
     get_user_trips(lines_arr, lines_count, username, user_data);
-    display_trips(user_data, lines_count);
+    int user_trips_count = count_user_trips(user_data, lines_count);
+    display_trips(user_data, user_trips_count);
+
+    free(data);
 }
 
 void trip_addition(int sockfd)

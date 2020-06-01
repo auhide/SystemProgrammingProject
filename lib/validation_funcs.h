@@ -19,6 +19,7 @@ void input_validation(int sockfd, char *buff, int (*validation_func)(char *));
 int init_input_is_valid(char *input);
 
 
+
 void input_validation(int sockfd, char *buff, int (*validation_func)(char *))
 {
     int valid = 0;

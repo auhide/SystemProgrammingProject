@@ -1,6 +1,6 @@
-#include "base_funcs.h"
+#include "base/base_funcs.h"
 #include "user_authentication.h"
-#include "trips_operations.h"
+#include "trips/trips_operations.h"
 #include "validation_funcs.h"
 
 
@@ -102,6 +102,7 @@ void trip_addition(int sockfd, char *username)
     // Getting the Distance
     input_validation(sockfd, dist, validate_distance);
     
+    memset(destinations, 0, sizeof(destinations));
     strcat(destinations, dest1);
     strcat(destinations, "-");
     strcat(destinations, dest2);
