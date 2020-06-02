@@ -30,6 +30,11 @@ void input_validation(int sockfd, char *buff, pthread_mutex_t lock, int (*valida
         recv_msg(sockfd, buff);
         printf("RECEIVED: %s\n", buff);
 
+        if (strcmp(buff, EXIT) == 0)
+        {
+            break;
+        }
+
         if (validation_func(buff, lock))
         {
             printf("Server: Response 1\n");

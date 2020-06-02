@@ -26,19 +26,25 @@ void communicate(int sockfd, pthread_mutex_t lock)
     char buff[MAX] = {0};
     int n;
 
-    input_validation(sockfd, buff, lock, init_input_is_valid);
-    printf("SERVER BUFFER: %s\n", buff);
-    
-    if (strcmp(REGISTRATION, buff) == 0)
+    while(1)
     {
-        input_validation(sockfd, buff, lock, username_is_valid);
+        input_validation(sockfd, buff, lock, init_input_is_valid);
+
+        if (strcmp(buff, EXIT) == 0)
+        {
+            break;
+        }
+
+        if (strcmp(REGISTRATION, buff) == 0)
+        {
+            input_validation(sockfd, buff, lock, username_is_valid);
+        }
+        else
+        {
+            input_validation(sockfd, buff, lock, login_is_valid);
+            trips_interaction(sockfd, buff, lock);
+        }
     }
-    else
-    {
-        input_validation(sockfd, buff, lock, login_is_valid);
-        trips_interaction(sockfd, buff, lock);
-    }
-    
 } 
 
 
@@ -51,6 +57,10 @@ void trips_interaction(int sockfd, char *buff, pthread_mutex_t lock)
     while(1)
     {
         input_validation(sockfd, buff, lock, trips_menu_choice_is_valid);
+        if (strcmp(buff, EXIT))
+        {
+            break;
+        }
         
         // Using if-else, because I am working with strings
         if (strcmp("1", buff) == 0)

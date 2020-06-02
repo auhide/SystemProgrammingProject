@@ -37,22 +37,27 @@ void communicate(int sockfd)
 { 
     char buff[MAX] = {0};
 
-    system("clear");
-    printf("Welcome to Trippy\n");
-    
-    display_init_options();
-
-    init_input_validation(sockfd, buff);
-    printf("CLIENT BUFFER: %s\n", buff);
-
-    if (strcmp(REGISTRATION, buff) == 0)
+    while(1)
     {
-        registration_form(sockfd, buff);
-    }
-    else
-    {
-        login_form(sockfd, buff);
-        trips_interaction(sockfd, buff);
+        system("clear");
+        printf("Welcome to Trippy\n");
+        printf("Enter 'exit' if you want to leave\n");
+        
+        display_init_options();
+
+        init_input_validation(sockfd, buff);
+
+        printf("CLIENT BUFFER: %s\n", buff);
+
+        if (strcmp(REGISTRATION, buff) == 0)
+        {
+            registration_form(sockfd, buff);
+        }
+        else
+        {
+            login_form(sockfd, buff);
+            trips_interaction(sockfd, buff);
+        }
     }
 }
 
@@ -80,6 +85,10 @@ void init_input_validation(int sockfd, char *buff)
         // Sending the initial choice to the Server
         printf("Enter choice: "); 
         send_msg(sockfd, buff);
+        if (strcmp(buff, EXIT) == 0)
+        {
+            exit(1);
+        }
 
         // Receiving the response from the Server
         recv_msg(sockfd, resp_buff);
@@ -152,7 +161,7 @@ void trips_interaction(int sockfd, char *buff)
         {
             get_topx(username);
         }
-        else if (strcmp("exit", buff) == 0)
+        else if (strcmp(buff, EXIT) == 0)
         {
             exit(1);
         }

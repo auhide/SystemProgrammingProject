@@ -21,7 +21,7 @@ typedef struct pthread_arg_t {
     pthread_mutex_t lock;
 } pthread_arg_t;
 
-/* Thread routine to serve connection to client. */
+/* Thread routine to serve client connections. */
 void *pthread_routine(void *arg);
 
 /* Signal handler to handle SIGTERM and SIGINT signals. */
@@ -109,9 +109,6 @@ int main(int argc, char *argv[]) {
 
         /* Initialise pthread argument. */
         pthread_arg->new_socket_fd = new_socket_fd;
-        /* TODO: Initialise arguments passed to threads here. See lines 22 and
-         * 139.
-         */
 
         /* Create thread to serve connection to client. */
         if (pthread_create(&pthread, &pthread_attr, pthread_routine, (void *)pthread_arg) != 0) {
@@ -121,10 +118,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    /* close(socket_fd);
-     * TODO: If you really want to close the socket, you would do it in
-     * signal_handler(), meaning socket_fd would need to be a global variable.
-     */
+    close(new_socket_fd);
+
     return 0;
 }
 
@@ -136,13 +131,7 @@ void *pthread_routine(void *arg) {
 
     free(arg);
 
-    /* TODO: Put client interaction code here. For example, use
-     * write(new_socket_fd,,) and read(new_socket_fd,,) to send and receive
-     * messages with the client.
-     */
 	communicate(new_socket_fd, lock);
-
-    close(new_socket_fd);
     return NULL;
 }
 
