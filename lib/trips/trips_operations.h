@@ -8,7 +8,7 @@
 #include "../base/constants.h"
 
 
-int add_trip(int file_desc, char trips_arr[TRIPS_ROWS][TRIPS_COLS]);
+int add_trip(int file_desc, char trips_arr[TRIPS_ROWS][TRIPS_COLS], pthread_mutex_t lock);
 
 void print_line_arr(char line[TRIPS_ROWS][TRIPS_COLS]);
 
@@ -160,12 +160,15 @@ void search_user_trips(char entries[TRIPS_ROWS][TRIPS_COLS],
 }
 
 
-int add_trip(int file_desc, char trips_arr[TRIPS_ROWS][TRIPS_COLS])
+int add_trip(int file_desc, char trips_arr[TRIPS_ROWS][TRIPS_COLS], pthread_mutex_t lock)
 {
     char current_snippet[TRIPS_COLS] = {0};
     print_line_arr(trips_arr);
 
     printf("Started adding...\n");
+    
+    // Lock Acquiring
+    pthread_mutex_lock(&lock);
     for (int row = 0; row < TRIPS_ROWS; row++)
     {
         strcat(current_snippet, trips_arr[row]);
@@ -182,8 +185,9 @@ int add_trip(int file_desc, char trips_arr[TRIPS_ROWS][TRIPS_COLS])
         write(file_desc, current_snippet, strlen(current_snippet));
         memset(current_snippet, 0, sizeof(current_snippet));
     }
-
     write(file_desc, "\n", 1);
+    pthread_mutex_unlock(&lock);
+
     printf("Trip added successfully!\n");
     return 1;
 }

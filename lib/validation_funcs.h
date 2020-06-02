@@ -1,26 +1,26 @@
 
 
-int username_is_valid(char *username);
+int username_is_valid(char *username, pthread_mutex_t lock);
 
-int login_is_valid(char *username);
+int login_is_valid(char *username, pthread_mutex_t lock);
 
-int trips_menu_choice_is_valid(char *choice);
+int trips_menu_choice_is_valid(char *choice, pthread_mutex_t lock);
 
-int validate_destination(char *dest);
+int validate_destination(char *dest, pthread_mutex_t lock);
 
-int validate_coordinate(char *coord);
+int validate_coordinate(char *coord, pthread_mutex_t lock);
 
-int validate_distance(char *dist);
+int validate_distance(char *dist, pthread_mutex_t lock);
 
-int validate_speed(char *dist);
+int validate_speed(char *dist, pthread_mutex_t lock);
 
-void input_validation(int sockfd, char *buff, int (*validation_func)(char *));
+void input_validation(int sockfd, char *buff, pthread_mutex_t lock, int (*validation_func)(char *, pthread_mutex_t));
 
-int init_input_is_valid(char *input);
+int init_input_is_valid(char *input, pthread_mutex_t lock);
 
 
 
-void input_validation(int sockfd, char *buff, int (*validation_func)(char *))
+void input_validation(int sockfd, char *buff, pthread_mutex_t lock, int (*validation_func)(char *, pthread_mutex_t))
 {
     int valid = 0;
     bzero(buff, MAX);
@@ -30,7 +30,7 @@ void input_validation(int sockfd, char *buff, int (*validation_func)(char *))
         recv_msg(sockfd, buff);
         printf("RECEIVED: %s\n", buff);
 
-        if (validation_func(buff))
+        if (validation_func(buff, lock))
         {
             printf("Server: Response 1\n");
             write(sockfd, "1", sizeof(buff));
@@ -48,12 +48,12 @@ void input_validation(int sockfd, char *buff, int (*validation_func)(char *))
 }
 
 
-int username_is_valid(char *username)
+int username_is_valid(char *username, pthread_mutex_t lock)
 {
     int fd = get_append_fd(USERS_FILE);
     int user_added_successfully;
 
-    user_added_successfully = add_user(fd, username);
+    user_added_successfully = add_user(fd, username, lock);
     close(fd);
 
     if (user_added_successfully && 
@@ -70,7 +70,7 @@ int username_is_valid(char *username)
 }
 
 
-int init_input_is_valid(char *input)
+int init_input_is_valid(char *input, pthread_mutex_t lock)
 {
 
     if (!substring_in_string("~", input) && strncmp("\n", input, 1) != 0)
@@ -85,10 +85,10 @@ int init_input_is_valid(char *input)
 }
 
 
-int login_is_valid(char *username)
+int login_is_valid(char *username, pthread_mutex_t lock)
 {
     int fd = get_read_fd(USERS_FILE);
-    int user_is_registered = validate_user(fd, username);
+    int user_is_registered = validate_user(fd, username, lock);
 
     if (user_is_registered)
     {
@@ -101,7 +101,7 @@ int login_is_valid(char *username)
 }
 
 
-int trips_menu_choice_is_valid(char *choice)
+int trips_menu_choice_is_valid(char *choice, pthread_mutex_t lock)
 {
     if (substring_in_string(choice, TRIPS_MENU_CHOICES) && 
         !substring_in_string("~", choice))
@@ -115,7 +115,7 @@ int trips_menu_choice_is_valid(char *choice)
 }
 
 
-int validate_destination(char *dest)
+int validate_destination(char *dest, pthread_mutex_t lock)
 {
     if (string_is_alphabetic(dest))
     {
@@ -128,7 +128,7 @@ int validate_destination(char *dest)
 }
 
 
-int validate_coordinate(char *coord)
+int validate_coordinate(char *coord, pthread_mutex_t lock)
 {
     if (regex_match(coord, COORD_REGEX))
     {
@@ -139,7 +139,7 @@ int validate_coordinate(char *coord)
 }
 
 
-int validate_distance(char *dist)
+int validate_distance(char *dist, pthread_mutex_t lock)
 {
     if (regex_match(dist, DIST_REGEX))
     {
@@ -151,7 +151,7 @@ int validate_distance(char *dist)
 
 
 
-int validate_speed(char *speed)
+int validate_speed(char *speed, pthread_mutex_t lock)
 {
     if (regex_match(speed, SPEED_REGEX))
     {

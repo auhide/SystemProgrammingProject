@@ -18,7 +18,7 @@
 typedef struct pthread_arg_t {
     int new_socket_fd;
     struct sockaddr_in client_address;
-    /* TODO: Put arguments passed to threads here. See lines 116 and 139. */
+    pthread_mutex_t lock;
 } pthread_arg_t;
 
 /* Thread routine to serve connection to client. */
@@ -26,9 +26,6 @@ void *pthread_routine(void *arg);
 
 /* Signal handler to handle SIGTERM and SIGINT signals. */
 void signal_handler(int signal_number);
-
-// Handles the communication between the client and the server
-void communicate(int sockfd);
 
 int main(int argc, char *argv[]) {
     int port, socket_fd, new_socket_fd;
@@ -44,8 +41,8 @@ int main(int argc, char *argv[]) {
 
     /* Initialise IPv4 address. */
     memset(&address, 0, sizeof address);
-    address.sin_family = AF_INET;
-    address.sin_port = htons(port);
+    address.sin_family      = AF_INET;
+    address.sin_port        = htons(port);
     address.sin_addr.s_addr = INADDR_ANY;
 
     /* Create TCP socket. */
@@ -132,10 +129,10 @@ int main(int argc, char *argv[]) {
 }
 
 void *pthread_routine(void *arg) {
-    pthread_arg_t *pthread_arg = (pthread_arg_t *)arg;
-    int new_socket_fd = pthread_arg->new_socket_fd;
+    pthread_arg_t *pthread_arg        = (pthread_arg_t *)arg;
+    int new_socket_fd                 = pthread_arg->new_socket_fd;
     struct sockaddr_in client_address = pthread_arg->client_address;
-    /* TODO: Get arguments passed to threads here. See lines 22 and 116. */
+    pthread_mutex_t lock              = pthread_arg->lock;
 
     free(arg);
 
@@ -143,13 +140,13 @@ void *pthread_routine(void *arg) {
      * write(new_socket_fd,,) and read(new_socket_fd,,) to send and receive
      * messages with the client.
      */
-	communicate(new_socket_fd);
+	communicate(new_socket_fd, lock);
 
     close(new_socket_fd);
     return NULL;
 }
 
 void signal_handler(int signal_number) {
-    /* TODO: Put exit cleanup code here. */
+
     exit(0);
 }
