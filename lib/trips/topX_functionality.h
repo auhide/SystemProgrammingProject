@@ -12,35 +12,6 @@ void sort_by_distances(char user_data[TRIPS_ROWS][TRIPS_COLS], int len);
 void swap(char *line1, char *line2);
 
 
-// int main()
-// {
-//     char *data = malloc(sizeof(char) * START_SIZE);
-//     int data_size;
-
-//     get_full_storage(data);
-//     data_size = strlen(data);
-    
-//     int lines_count = get_lines_number(data, data_size);
-
-//     char *lines_arr[TRIPS_COLS] = {0};
-//     split_string_to_array(data, STORAGE_DELIMITER, lines_arr);
-
-//     // Dinamically allocate the 2d Array for the users' information
-//     char **user_data = (char **)calloc(data_size, sizeof (char *));
-//     add_chunks_to(user_data, lines_count);
-
-//     get_user_trips(lines_arr, lines_count, "User3", user_data);
-//     // printf("%d", cmp_distances(lines_arr[0], user_data[5]));
-//     int user_trips_count = count_user_trips(user_data, lines_count);
-
-//     sort_by_distances(user_data, lines_count);
-//     display_top("shortest", 3, user_data, user_trips_count);
-    
-//     free_2d_array(user_data, lines_count);
-//     free(data);
-
-//     return 0;
-// }
 
 int cmp_distances(char *f_entry, char *s_entry)
 {
@@ -67,7 +38,7 @@ int count_user_trips(char user_data[TRIPS_ROWS][TRIPS_COLS], int general_len)
 
     for (int i = 0; i < general_len; i++)
     {
-        if (strlen(user_data[i]) > 0) { trips_count++; }
+        if (substring_in_string("#", user_data[i])) { trips_count++; }
     }
 
     return trips_count;

@@ -92,7 +92,6 @@ void init_input_validation(int sockfd, char *buff)
 
         // Receiving the response from the Server
         recv_msg(sockfd, resp_buff);
-        printf("SERVER RESPONSE: %s\n", resp_buff);
 
         if (substring_in_string("0", resp_buff))
         {
@@ -133,7 +132,6 @@ void trips_interaction(int sockfd, char *buff)
     {
         bzero(buff, MAX);
         printf("\n\n");
-        printf("Enter 'exit' if you want to close the program\n");
 
         printf("1. Add new trip\n");
         printf("2. Display all my trips\n");
@@ -254,15 +252,15 @@ void display_user_trips(char *username)
     data_size = strlen(data);
 
     int lines_count = get_lines_number(data, data_size);
-    printf("You have %d trips!\n", lines_count);
     
     char lines_arr[TRIPS_ROWS][TRIPS_COLS] = {0};
     split_string_to_array(data, STORAGE_DELIMITER, lines_arr);
 
-    char user_data[TRIPS_ROWS][TRIPS_COLS];
+    char user_data[TRIPS_ROWS][TRIPS_COLS] = {0};
 
     get_user_trips(lines_arr, lines_count, username, user_data);
     int user_trips_count = count_user_trips(user_data, lines_count);
+
     display_trips(user_data, user_trips_count);
 
     free(data);
@@ -335,7 +333,6 @@ void single_interaction(int sockfd, char *buff, char *input, char *output)
 
         // Receiving the response from the Server
         recv_msg(sockfd, resp_buff);
-        printf("SERVER RESPONSE: |%s|\n", resp_buff);
 
         if (substring_in_string("0", resp_buff))
         {

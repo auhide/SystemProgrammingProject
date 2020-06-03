@@ -45,11 +45,15 @@ int main(int argc, char *argv[]) {
     address.sin_port        = htons(port);
     address.sin_addr.s_addr = INADDR_ANY;
 
+    int sock_option = 1;
+
     /* Create TCP socket. */
     if ((socket_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
         perror("socket");
         exit(1);
     }
+
+    setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &sock_option, sizeof(sock_option));
 
     /* Bind address to socket. */
     if (bind(socket_fd, (struct sockaddr *)&address, sizeof address) == -1) {

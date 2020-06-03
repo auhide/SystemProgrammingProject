@@ -28,25 +28,17 @@ void input_validation(int sockfd, char *buff, pthread_mutex_t lock, int (*valida
     do
     {
         recv_msg(sockfd, buff);
-        printf("RECEIVED: %s\n", buff);
-
-        if (strcmp(buff, EXIT) == 0)
-        {
-            break;
-        }
 
         if (validation_func(buff, lock))
         {
-            printf("Server: Response 1\n");
             write(sockfd, "1", sizeof(buff));
             valid = 1;
         } 
         else
         {
-            printf("Server: Response 0\n");
             write(sockfd, "0", sizeof(buff));
             bzero(buff, MAX);
-            strcpy(buff, "0");
+            strcpy(buff, "0");  
         }
 
     } while (!valid);
@@ -126,10 +118,8 @@ int validate_destination(char *dest, pthread_mutex_t lock)
     {
         return 1;
     }
-    else
-    {
-        return 0;
-    }
+    
+    return 0;
 }
 
 

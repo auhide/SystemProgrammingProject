@@ -14,6 +14,7 @@ int add_user(int file_desc, char *username, pthread_mutex_t lock);
 int validate_user(int file_desc, char *username, pthread_mutex_t lock);
 
 
+
 char *get_users_storage(pthread_mutex_t lock)
 {
     char *users_data = malloc(sizeof(char) * START_SIZE);
@@ -45,13 +46,20 @@ char *get_users_storage(pthread_mutex_t lock)
 
 int validate_user(int file_desc, char *username, pthread_mutex_t lock)
 {
-    if (substring_in_string(username, get_users_storage(lock)))
+    char *temp_username = malloc(strlen(username));
+    char *user_data = get_users_storage(lock);
+    strcat(temp_username, username);
+    strcat(temp_username, "\n");
+    
+
+    if (substring_in_string(temp_username, user_data))
     {
         return 1;    
     }
     
     return 0;
 }
+
 
 int add_user(int file_desc, char *username, pthread_mutex_t lock)
 {

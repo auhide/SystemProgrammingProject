@@ -75,7 +75,9 @@ void display_trips(char data[TRIPS_ROWS][TRIPS_COLS], int data_size)
 {
     int found = 0;
     char curr_line_arr[TRIPS_ROWS][TRIPS_COLS];
+    printf("\n\n---------------\n");
     printf("YOUR TRIPS:\n");
+    printf("---------------\n");
 
     for (int i = 0; i < data_size; i++)
     {
@@ -99,12 +101,14 @@ void get_user_trips(char data[TRIPS_ROWS][TRIPS_COLS], int data_size, char *user
 {
     int found = 0;
     int user_data_index = 0;
+    int counter = 0;
+    
 
     for (int i = 0; i < data_size; i++)
     {
         if (substring_in_string(username, data[i]))
         {
-            strcpy(user_data[user_data_index++], data[i]);        
+            strcpy(user_data[user_data_index++], data[i]);
         }
         
     }
@@ -166,7 +170,7 @@ int add_trip(int file_desc, char trips_arr[TRIPS_ROWS][TRIPS_COLS], pthread_mute
     print_line_arr(trips_arr);
 
     printf("Started adding...\n");
-    
+
     // Lock Acquiring
     pthread_mutex_lock(&lock);
     for (int row = 0; row < TRIPS_ROWS; row++)

@@ -22,7 +22,7 @@ void insert_trip_info_to_array(char trip_line[TRIPS_ROWS][TRIPS_COLS],
 
 
 void communicate(int sockfd, pthread_mutex_t lock) 
-{ 
+{
     char buff[MAX] = {0};
     int n;
 
@@ -57,10 +57,6 @@ void trips_interaction(int sockfd, char *buff, pthread_mutex_t lock)
     while(1)
     {
         input_validation(sockfd, buff, lock, trips_menu_choice_is_valid);
-        if (strcmp(buff, EXIT))
-        {
-            break;
-        }
         
         // Using if-else, because I am working with strings
         if (strcmp("1", buff) == 0)
